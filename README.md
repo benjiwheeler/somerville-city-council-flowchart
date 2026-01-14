@@ -33,4 +33,4 @@ Open an issue here in Github, or email me, Ben Wheeler, at bwheeler@somervillema
 
 [View flowchart (raw SVG)](https://raw.githubusercontent.com/benjiwheeler/somerville-city-council-flowchart/main/flowchart.svg)
 
-![Flowchart rendering](./flowchart.svg)
+![Flowchart rendering](https://raw.githubusercontent.com/benjiwheeler/somerville-city-council-flowchart/main/flowchart.svg)
