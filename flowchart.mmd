@@ -1,0 +1,88 @@
+---
+config:
+  layout: elk
+---
+stateDiagram
+  direction TB
+  classDef finalStatusNeg fill:#f9f2f4,stroke:#b80f0a,stroke-width:2px,color:#b80f0a;
+  classDef finalStatusMid fill:#fcf4a3,stroke:#ee8833,stroke-width:2px,color:#ee8833;
+  classDef finalStatusPos fill:#f2f9f2,stroke:#0fb80a,stroke-width:2px,color:#0fb80a;
+
+  state Committee_Process {
+    In_the_Box
+    To_Be_Reported
+    On_Committee_Agenda
+
+    On_Committee_Agenda --> To_Be_Reported:Approved
+    In_the_Box --> On_Committee_Agenda:Scheduled by Chair
+    On_Committee_Agenda --> In_the_Box:Lay on Table (indefinitely)
+    On_Committee_Agenda --> In_the_Box:Discussed (no decision)
+    On_Committee_Agenda --> To_Be_Reported:Not Approved
+    On_Committee_Agenda --> To_Be_Reported:Report Without Recommendation
+  }
+
+  state City_Council {
+    Councilors
+    On_Council_Agenda
+    Discussion
+    Decision_with_presumed_unanimity
+    Reconsideration_vote
+    Override_Vote
+
+    On_Council_Agenda --> Discussion:Reading
+    Discussion --> Floor_vote
+    Discussion --> Reconsideration_vote:Motion to reconsider
+    Discussion --> Decision_with_presumed_unanimity:Small and routine matters
+    Decision_with_presumed_unanimity --> On_Council_Agenda:Postpone to specific date
+    Decision_with_presumed_unanimity --> On_Council_Agenda:Lay on Table until next meeting
+    Reconsideration_vote --> Floor_vote:Reconsideration succeeds
+    Floor_vote:Vote on ordinance
+    Floor_vote:1st reading needs 2/3
+    Floor_vote:2nd reading only needs majority
+    Councilors --> On_Council_Agenda:Submit items
+  }
+  state Clerks_custody {
+    Waiting_period
+  }
+
+  state Administration {
+    Presented_to_Mayor
+    Vetoed_by_Mayor
+    Presented_to_Mayor --> Vetoed_by_Mayor:Mayor objects
+    Needs_and_statutory_requirements
+  }
+
+  state Terminal_States {
+    Approved
+    Adopted_Enacted
+    Defeated_cannot_be_reintroduced:Defeated, cannot be reintroduced for period
+    No_longer_active_can_be_reintroduced
+  }
+
+  Needs_and_statutory_requirements --> On_Council_Agenda:Item requests
+  To_Be_Reported --> On_Council_Agenda
+  Floor_vote --> Waiting_period:Vote succeeds (ordinance)
+  Waiting_period --> Presented_to_Mayor:No one files for reconsideration (ordinance)
+  Waiting_period --> Approved:No one files for reconsideration (non-ordinance)
+  Waiting_period --> Reconsideration_vote:Someone in majority files for reconsideration
+  Reconsideration_vote --> Approved:Reconsideration fails (non-ordinance)
+  Reconsideration_vote --> Presented_to_Mayor:Reconsideration fails (ordinance)
+  Floor_vote --> Defeated_cannot_be_reintroduced:Vote fails
+  Presented_to_Mayor --> Adopted_Enacted:Signed or 10 Days Pass
+  Committee_Process --> No_longer_active_can_be_reintroduced:End of Term
+  On_Council_Agenda --> In_the_Box:Referred to Committee
+  On_Committee_Agenda --> No_longer_active_can_be_reintroduced:Mark work completed
+  Vetoed_by_Mayor --> Override_Vote:Override Attempt
+  Override_Vote --> Adopted_Enacted:Override succeeds
+  Override_Vote --> Defeated_cannot_be_reintroduced:Override fails
+  Decision_with_presumed_unanimity --> No_longer_active_can_be_reintroduced:Place on File
+
+  Clerks_custody:Clerk's custody
+  Committee_Process:Committee
+  City_Council:City Council
+  Terminal_States:VI. TERMINAL STATES
+
+  class Defeated_cannot_be_reintroduced finalStatusNeg
+  class No_longer_active_can_be_reintroduced finalStatusMid
+  class Adopted_Enacted,Approved finalStatusPos
+
