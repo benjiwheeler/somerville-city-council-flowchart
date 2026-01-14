@@ -23,6 +23,14 @@ This is a self-acknowledged City Council-centric view of things! This is NOT sup
 to represent an over summary of decision-making. It's purely to help orient people
 to the procedures in and surrounding the City Council.
 
+## FAQ
+
+Q. Why is this chart so annoyingly laid out?
+
+A. Mermaid.js is a rendering library that generates a chart image automatically, with the source file only defining nodes and their relationships. On the minus side, it makes
+for charts that are hard to read. On the plus side, you don't spend forever fiddling with
+the layout.
+
 ## Contact
 
 Questions? Comments?
